@@ -20,12 +20,12 @@ def get_tracer():
     print("🔍 Creating tracer for the first time...")
     
     # Connect to Foundry Project
-    project_connection_string = ENV_VARIABLES["AZURE_AI_FOUNDRY_PROJECT_CONNECTION_STRING"]
+    project_connection_string = ENV_VARIABLES["AZURE-AI-FOUNDRY-CONNECTION"]
     project_client = AIProjectClient.from_connection_string(
         credential=ClientSecretCredential(
-            client_id=ENV_VARIABLES["APP_REGISTRATION_CLIENT_ID"],
-            client_secret=ENV_VARIABLES["APP_REGISTRATION_CLIENT_SECRET"],
-            tenant_id=ENV_VARIABLES["APP_REGISTRATION_TENANT_ID"]
+            client_id=ENV_VARIABLES["APP-REGISTRATION-CLIENT-ID"],
+            client_secret=ENV_VARIABLES["APP-REGISTRATION-CLIENT-SECRET"],
+            tenant_id=ENV_VARIABLES["APP-REGISTRATION-TENANT-ID"]
         ),
         conn_str=project_connection_string
     )

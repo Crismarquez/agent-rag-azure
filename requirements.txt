@@ -11,6 +11,7 @@ pytz
 aioodbc==0.5.0
 azure-ai-projects==1.0.0b6
 azure-identity
+azure-keyvault-secrets==4.10.0
 langchain-azure-ai
 langchain-azure-ai[opentelemetry]
 matplotlib==3.10.3

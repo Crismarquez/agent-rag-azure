@@ -1,24 +1,41 @@
 
-from azure.search.documents import SearchClient
-from azure.core.credentials import AzureKeyCredential
+from azure.search.documents.aio import SearchClient as AsyncSearchClient
 from azure.search.documents.models import VectorizedQuery
+from azure.identity import EnvironmentCredential, AzureAuthorityHosts, get_bearer_token_provider
 from langchain_openai import AzureOpenAIEmbeddings
+from openai import AsyncAzureOpenAI
 
 from config.config import ENV_VARIABLES
 
 
 class CognitiveSearch:
     def __init__(self) -> None:
-        self.embedding_model = AzureOpenAIEmbeddings(
-            azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com",
-            openai_api_key=ENV_VARIABLES["AZURE_OPENAI_API_KEY"],
-            azure_deployment=ENV_VARIABLES["AZURE_OPENAI_EMBEDDING"],
-            openai_api_version="2023-05-15",
+
+        authority = AzureAuthorityHosts.AZURE_PUBLIC_CLOUD
+        credential = EnvironmentCredential(authority_host=authority)
+        self.search_client = AsyncSearchClient(
+            endpoint=f"https://{ENV_VARIABLES['AZURE_SEARCH_SERVICE']}.search.windows.net", index_name=ENV_VARIABLES["AZURE_SEARCH_INDEX"], credential=credential, audience=audience
+        )
+    
+        self._embed_model = ENV_VARIABLES.get("AZURE_OPENAI_EMBEDDING", "textembedding")
+
+        token_provider = get_bearer_token_provider(
+    EnvironmentCredential(),
+    "https://cognitiveservices.azure.com/.default"
+)
+        self._client = AsyncAzureOpenAI(
+            azure_endpoint=ENV_VARIABLES.get("AZURE_OPENAI_ENDPOINT"),
+            azure_ad_token_provider=token_provider,
+            azure_deployment=self._embed_model,
+            api_version="2024-02-15-preview",
         )
 
     async def generate_embeddings(self, text):
-        embedding = await self.embedding_model.aembed_query(text)
-        return embedding
+        response = await self._client.embeddings.create(
+            input=[text], model=self._embed_model
+        )
+        embeddings = response.data[0].embedding
+        return embeddings
     
 
     async def search(
@@ -29,11 +46,6 @@ class CognitiveSearch:
         filters: dict | None = None,
         **kwargs: dict | None,
     ):
-        self.search_client = SearchClient(
-            endpoint=f"https://{ENV_VARIABLES['AZURE_SEARCH_SERVICE']}.search.windows.net",
-            index_name=ENV_VARIABLES["AZURE_SEARCH_INDEX"],
-            credential=AzureKeyCredential(ENV_VARIABLES["AZURE_SEARCH_KEY"]),
-        )
 
         vector = await self.generate_embeddings(semantic_query)
 

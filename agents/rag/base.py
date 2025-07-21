@@ -1,6 +1,9 @@
 
 from typing import Literal
 
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+
+
 from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langgraph.graph import START, END, StateGraph
@@ -27,14 +30,17 @@ class RAGAgent(BaseAgent):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        credential = DefaultAzureCredential()
+        token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
+
         self.llm = AzureChatOpenAI(
-                    deployment_name=ENV_VARIABLES["AZURE_OPENAI_CHATGPT4_DEPLOYMENT"],
-                    api_key=ENV_VARIABLES["AZURE_OPENAI_API_KEY"],
-                    azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com/",
-                    api_version="2025-04-01-preview",
-                    temperature=0.7,
-                    seed=42,
-                )
+            deployment_name=ENV_VARIABLES["AZURE_OPENAI_CHATGPT4_DEPLOYMENT"],
+            azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com/",
+            api_version="2025-04-01-preview",
+            azure_ad_token_provider=token_provider,  # Aquí usamos AAD en vez de api_key
+            temperature=0.7,
+            seed=42,
+        )
         
         self.guardrails_prompt = GUARDRAILS_PROMPT
         self.friendly_response_prompt = FRIENDLY_RESPONSE_PROMPT
@@ -211,7 +217,7 @@ class RAGAgent(BaseAgent):
             "messages": langchain_messages,
             "conversation_id": metadata["conversation_id"],
             "user_id": metadata["user_id"],
-            "document": metadata.get("document", "")
+            "ids_content": []
         }
         
         #configuration sent to the invoke method
