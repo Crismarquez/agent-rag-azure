@@ -53,3 +53,7 @@ def format_tool_for_prompt(tool: BaseTool) -> str:
 def load_guardrails_examples() -> List[Dict[str, str]]:
     with open(Path(BASE_DIR, "agents", "rag", "prompts", "guardrails_examples.json"), "r") as f:
         return json.load(f)
+    
+def load_json_examples(file_name: str) -> List[Dict[str, str]]:
+    with open(Path(BASE_DIR, "agents", "rag", "prompts", file_name), "r") as f:
+        return json.load(f)

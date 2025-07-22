@@ -33,14 +33,17 @@ class RAGAgent(BaseAgent):
         credential = DefaultAzureCredential()
         token_provider = get_bearer_token_provider(credential, "https://cognitiveservices.azure.com/.default")
 
-        self.llm = AzureChatOpenAI(
-            deployment_name=ENV_VARIABLES["AZURE_OPENAI_CHATGPT4_DEPLOYMENT"],
-            azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com/",
-            api_version="2025-04-01-preview",
+        if self.llm_provider == "azure":
+            self.llm = AzureChatOpenAI(
+                deployment_name=ENV_VARIABLES["AZURE_OPENAI_CHATGPT4_DEPLOYMENT"],
+                azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com/",
+                api_version="2025-04-01-preview",
             azure_ad_token_provider=token_provider,  # Aquí usamos AAD en vez de api_key
             temperature=0.7,
             seed=42,
         )
+        else:
+            raise ValueError(f"LLM provider {self.llm_provider} not supported")
         
         self.guardrails_prompt = GUARDRAILS_PROMPT
         self.friendly_response_prompt = FRIENDLY_RESPONSE_PROMPT
@@ -86,10 +89,10 @@ class RAGAgent(BaseAgent):
         agent_graph = builder.compile()
 
         # Obtener los bytes de la imagen PNG
-        png_bytes = agent_graph.get_graph().draw_mermaid_png()
+        #png_bytes = agent_graph.get_graph().draw_mermaid_png()
         # Guardar la imagen en un archivo
-        with open("grafo_rag_agent.png", "wb") as f:
-            f.write(png_bytes)
+        # with open("grafo_rag_agent.png", "wb") as f:
+        #    f.write(png_bytes)
         
         return agent_graph
     

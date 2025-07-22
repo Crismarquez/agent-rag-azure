@@ -14,7 +14,9 @@ class CognitiveSearch:
         authority = AzureAuthorityHosts.AZURE_PUBLIC_CLOUD
         credential = EnvironmentCredential(authority_host=authority)
         self.search_client = AsyncSearchClient(
-            endpoint=f"https://{ENV_VARIABLES['AZURE_SEARCH_SERVICE']}.search.windows.net", index_name=ENV_VARIABLES["AZURE_SEARCH_INDEX"], credential=credential, audience=audience
+            endpoint=f"https://{ENV_VARIABLES['AZURE_SEARCH_SERVICE']}.search.windows.net", 
+            index_name=ENV_VARIABLES["AZURE_SEARCH_INDEX"], 
+            credential=credential
         )
     
         self._embed_model = ENV_VARIABLES.get("AZURE_OPENAI_EMBEDDING", "textembedding")
@@ -24,11 +26,21 @@ class CognitiveSearch:
     "https://cognitiveservices.azure.com/.default"
 )
         self._client = AsyncAzureOpenAI(
-            azure_endpoint=ENV_VARIABLES.get("AZURE_OPENAI_ENDPOINT"),
+            azure_endpoint=f"https://{ENV_VARIABLES['AZURE_OPENAI_SERVICE']}.openai.azure.com/",
             azure_ad_token_provider=token_provider,
             azure_deployment=self._embed_model,
             api_version="2024-02-15-preview",
         )
+        self._closed = False
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.aclose()
+
+    async def aclose(self):
+        if not self._closed:
+            await self.search_client.close()
+            await self._client.close()
+            self._closed = True
 
     async def generate_embeddings(self, text):
         response = await self._client.embeddings.create(
@@ -72,20 +84,20 @@ class CognitiveSearch:
         if filters:
             filters = self._build_filters(filters)
 
-            results = self.search_client.search(
+            results = await self.search_client.search(
                 search_text=semantic_query,
                 vector_queries=[vector_query],
                 filter=filters,
                 top=top,
             )
         else:
-            results = self.search_client.search(
+            results = await self.search_client.search(
                 search_text=semantic_query,
                 vector_queries=[vector_query],
                 top=top,
             )
 
-        result_docs = [record for record in results]
+        result_docs = [record async for record in results]
         result_docs = self.delete_duplicates(result_docs)
 
         return result_docs

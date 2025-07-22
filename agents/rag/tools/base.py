@@ -21,12 +21,14 @@ async def general_search(
     """
     include_fields = ["domain", "source", "id_document", "id_content", "@search.score", "@search.reranker_score", "content"]
     #user_id = state['user_id']
+    
     search_client = CognitiveSearch()
     search_results = await search_client.search(
         query,
         top=20,
         use_hybrid=True,
     )
+    await search_client.aclose()
     result_fields: List[Dict] = [
         { field: record.get(field) for field in include_fields }
         for record in search_results
@@ -62,6 +64,7 @@ async def domain_search(
         use_hybrid=True,
         filters={"domain": domain}
     )
+    await search_client.aclose()
 
     result_fields: List[Dict] = [
         { field: record.get(field) for field in include_fields }
