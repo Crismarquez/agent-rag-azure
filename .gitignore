@@ -174,4 +174,5 @@ cython_debug/
 .pypirc
 
 chroma_db/
-data/
+data/evaluations
+

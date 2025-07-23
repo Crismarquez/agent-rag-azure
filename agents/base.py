@@ -76,12 +76,16 @@ class EvaluationAgent():
     [
         (
             "system",
-            self.guardrails_prompt["system"]
+            self.evaluation_prompt["system"]
         ),
-        ("human",  self.guardrails_prompt["human"]),
+        ("human",  self.evaluation_prompt["human"]),
         ]
         ) 
         
         eval_runnable = prompt | self.llm.with_structured_output(schema=ScoreSchema, method="function_calling", include_raw=False)
-        eval_response = await eval_runnable.ainvoke({"examples": self.evaluation_examples,"ground_truth": record_dataset["answer"],"candidate": record_dataset["response"]})
+        eval_response = await eval_runnable.ainvoke({
+            "examples": self.evaluation_examples,
+            "ground_truth": record_dataset["answer"],
+            "candidate": record_dataset["result"]["answer"]
+            })
         return eval_response

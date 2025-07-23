@@ -3,4 +3,5 @@ from typing import Optional, Annotated, Literal
 
 class ScoreSchema(BaseModel):
     """Puntuación de la pregunta."""
-    evalutaion: Literal[""]
+    analysis: str =  Field(..., description="Análisis de la respuesta generada.")
+    evaluation: Literal["none", "few", "most", "all"]

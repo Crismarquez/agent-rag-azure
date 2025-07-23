@@ -1,0 +1,57 @@
+[
+    {
+      "id": 1,
+      "question": "¿Cuál es la duración de la garantía para portátiles y computadoras de escritorio?",
+      "answer": "2 años desde la fecha de compra"
+    },
+    {
+      "id": 2,
+      "question": "¿Qué cobertura adicional se ofrece para las estaciones de trabajo profesionales?",
+      "answer": "Acceso a asistencia técnica especializada"
+    },
+    {
+      "id": 3,
+      "question": "¿Cuánto tiempo adicional se puede extender la garantía opcional?",
+      "answer": "Hasta 2 años adicionales"
+    },
+    {
+      "id": 4,
+      "question": "¿Qué componentes de hardware principal están cubiertos por la garantía?",
+      "answer": "Placa base, procesador, memoria RAM, tarjeta gráfica (GPU), fuente de poder, almacenamiento, tarjetas de expansión"
+    },
+    {
+      "id": 5,
+      "question": "¿Qué tipo de problemas en la pantalla están cubiertos por la garantía?",
+      "answer": "Píxeles muertos, brillo desigual, fallos de sincronización de imagen, problemas de retroiluminación, sensibilidad reducida o errores de calibración en pantallas táctiles"
+    },
+    {
+      "id": 6,
+      "question": "¿Qué fallas en el teclado y trackpad están cubiertas por la garantía?",
+      "answer": "Fallas mecánicas, detección avanzada de doble pulsación, retroiluminación defectuosa"
+    },
+    {
+      "id": 7,
+      "question": "¿Qué conexiones y puertos están cubiertos por la garantía en caso de fallas derivadas del uso normal?",
+      "answer": "USB, HDMI, Ethernet, audio"
+    },
+    {
+      "id": 8,
+      "question": "¿Qué tipos de intervenciones anulan la garantía?",
+      "answer": "Manipulación por terceros no certificados"
+    },
+    {
+      "id": 9,
+      "question": "¿Qué necesita proporcionar el cliente para iniciar un reclamo de garantía?",
+      "answer": "Número de serie del equipo, comprobante de compra, descripción del problema"
+    },
+    {
+      "id": 10,
+      "question": "¿La garantía cubre el software adicional instalado por el cliente?",
+      "answer": "No, solo cubre el sistema operativo y programas preinstalados por la fábrica"
+    },
+    {
+      "id": 11,
+      "question": "¿La garantía es transferible si vendo el equipo?",
+      "answer": "Sí, siempre y cuando se presente el comprobante de compra original"
+    }
+  ]

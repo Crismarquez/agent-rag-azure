@@ -2,26 +2,26 @@
     {
       "ground_truth": "La fotosíntesis es el proceso por el cual las plantas convierten la luz solar en energía química.",
       "candidate": "Las plantas necesitan tierra fértil para crecer bien.",
-      "evaluation": "none",
-      "rationale": "La respuesta generada no menciona la fotosíntesis ni el uso de luz solar o energía química."
+      "analysis": "La respuesta generada no menciona la fotosíntesis ni el uso de luz solar o energía química.",
+      "evaluation": "none"
     },
     {
       "ground_truth": "El sistema inmunológico humano se compone de células, tejidos y órganos que trabajan juntos para defender el cuerpo contra organismos patógenos.",
       "candidate": "El sistema inmunológico protege el cuerpo de enfermedades.",
-      "evaluation": "few",
-      "rationale": "Aunque se menciona que el sistema inmunológico protege, no se detallan los elementos clave como células, tejidos y órganos, ni se menciona la defensa contra organismos patógenos."
+      "analysis": "Aunque se menciona que el sistema inmunológico protege, no se detallan los elementos clave como células, tejidos y órganos, ni se menciona la defensa contra organismos patógenos.",
+      "evaluation": "few" 
     },
     {
       "ground_truth": "La Revolución Francesa comenzó en 1789 como una respuesta al descontento social y económico, y culminó con el ascenso de Napoleón Bonaparte en 1799.",
       "candidate": "La Revolución Francesa empezó en 1789 debido a tensiones sociales y económicas. Más tarde, Napoleón tomó el poder.",
-      "evaluation": "most",
-      "rationale": "La respuesta cubre casi todos los elementos importantes: fecha de inicio, causas sociales/económicas y resultado. No se menciona explícitamente el año de finalización, pero el sentido general está bien cubierto."
+      "analysis": "La respuesta cubre casi todos los elementos importantes: fecha de inicio, causas sociales/económicas y resultado. No se menciona explícitamente el año de finalización, pero el sentido general está bien cubierto."      ,
+      "evaluation": "most"
     },
     {
       "ground_truth": "La capital de Japón es Tokio, y es conocida por su tecnología avanzada, cultura pop y excelente red de transporte.",
       "candidate": "Tokio, la capital de Japón, destaca por su tecnología, cultura pop y sistema de transporte eficiente.",
-      "evaluation": "all",
-      "rationale": "La respuesta incluye todos los elementos clave: Tokio como capital, su tecnología, cultura pop y red de transporte."
+      "analysis": "La respuesta incluye todos los elementos clave: Tokio como capital, su tecnología, cultura pop y red de transporte.",
+      "evaluation": "all"
     }
   ]
   

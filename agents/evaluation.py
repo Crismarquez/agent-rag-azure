@@ -7,6 +7,7 @@ import asyncio
 import time
 
 from agents.rag.base import BaseAgent
+from agents.base import EvaluationAgent
 from schemas.conversation import MessageItem
 
 METADATA = {
@@ -42,6 +43,7 @@ class Evaluator:
 
         self.dataloader = dataloader
         self.assistant = model_pipeline
+        self.evaluator = EvaluationAgent(llm_provider="azure")
 
     async def run_prediction(self, size_sample: int = 100) -> None:
         dataset = self.dataloader.load_data()
@@ -94,5 +96,20 @@ class Evaluator:
         return sampled_data
     
     async def evaluate_prediction(self, sampled_data: list) -> None:
-        pass
 
+        async def evaluate_batch(batch):
+            tasks = [self.evaluator.run(session) for session in batch]
+            results = await asyncio.gather(*tasks)
+            for session, result in zip(batch, results):
+                session["evaluation"] = {
+                    "analysis": result.analysis,
+                    "score": result.evaluation,
+                }
+
+        # # Dividir sampled_data en lotes de 15
+        batches = [sampled_data[i:i + 15] for i in range(0, len(sampled_data), 15)]
+
+        for batch in batches:
+            await evaluate_batch(batch)
+
+        return sampled_data
