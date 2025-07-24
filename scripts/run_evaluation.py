@@ -119,5 +119,5 @@ async def get_metrics(prediction_run: str):
 # Run the main function
 if __name__ == "__main__":
     import asyncio
-    #asyncio.run(main("run_1"))
-    asyncio.run(get_metrics("run_1"))
+    asyncio.run(main())
+    asyncio.run(get_metrics("run_2"))
